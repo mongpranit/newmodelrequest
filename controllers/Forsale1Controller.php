@@ -17,17 +17,43 @@ class Forsale1Controller extends Controller
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+     public function behaviors(){
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+             'access' => [
+                 'class' => AccessControl::className(),
+                 'ruleConfig'=>[
+                   'class'=>AccessRule::className(),
+                 ],
+                 'only' => ['create', 'update', 'delete','index','view'],
+                 'rules' => [
+                     [
+                         //กำหนด User ที่สามารถทำการ Create,Update,Delete ได้
+                         'actions' => ['create','update','delete','index','view'],
+                         'allow' => true,
+                         'roles' => [
+                             Users::ROLE_MANAGER,
+                             Users::ROLE_ADMIN,
+                             //User::ROLE_USER,
+                         ],
+                     ],
+                     [
+                         //กำหนดสิทธิ์ User ที่สามารถเข้าดูข้อมูลได้ในหน้า index,view ได้เท่านั้น
+                         'actions' => ['view','update'],
+                         'allow' => true,
+                         'roles' => [
+                             Users::ROLE_USER,
+                         ],
+                     ],
+                 ],
+             ],
+             'verbs' => [
+                 'class' => VerbFilter::className(),
+                 'actions' => [
+                     'logout' => ['post'],
+                 ],
+             ],
+         ];
+     }//End***
 
     /**
      * Lists all Forsale1 models.

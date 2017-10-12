@@ -41,18 +41,6 @@ AppAsset::register($this);
             ['label' => 'Request', 'url' => ['/request/index']],
             ['label' => 'Vehicle', 'url' => ['/vehicledata/index']],
             ['label' => 'Forsale', 'url' => ['/forsale1/index']],
-            ['label'=>'User','items'=>[
-                    //['label' => 'Profile', 'url' => ['/user/view','id'=>Yii::$app->user->identity->id]],
-                    ['label' => 'Profile', 'url' => ['/user/profile']],
-                    ['label' => 'User', 'url' => ['/user/index']],
-                    ['label' => 'Cnange Password', 'url' => ['/user/change_password']],
-                    ['label'=>'Logout']
-                    /*['label'=>'Logout(' . Yii::$app->user->identity->username . ')',
-                        'url' => ['/site/logout'],
-                        'linkOptions' => ['data-method' => 'post']
-                    ]*/
-            ]],
-
             Yii::$app->user->isGuest ?
                 ['label' => 'Login', 'url' => ['/site/login']] :
                 /*[
