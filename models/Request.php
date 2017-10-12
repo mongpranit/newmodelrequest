@@ -48,18 +48,17 @@ class Request extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'tableid' => 'Tableid',
-            'id' => 'ID',
-            'n_number_request' => 'N Number Request',
-            'rd_status_app' => 'Rd Status App',
-            'rd_developin' => 'Rd Developin',
-            'internation_receive' => 'Internation Receive',
-            'internation_receivedate' => 'Internation Receivedate',
-            'internation_name' => 'Internation Name',
-            'sync_cloud_status' => 'Sync Cloud Status',
-            'sync_cloud_date' => 'Sync Cloud Date',
-            'cloud_uuid' => 'Cloud Uuid',
+            'tableid' => Yii::t('app', 'Tableid'),
+            'id' => Yii::t('app', 'ID'),
+            'n_number_request' => Yii::t('app', 'N Number Request'),
+            'rd_status_app' => Yii::t('app', 'Rd Status App'),
+            'rd_developin' => Yii::t('app', 'Rd Developin'),
+            'internation_receive' => Yii::t('app', 'Internation Receive'),
+            'internation_receivedate' => Yii::t('app', 'Internation Receivedate'),
+            'internation_name' => Yii::t('app', 'Internation Name'),
+            'sync_cloud_status' => Yii::t('app', 'Sync Cloud Status'),
+            'sync_cloud_date' => Yii::t('app', 'Sync Cloud Date'),
+            'cloud_uuid' => Yii::t('app', 'Cloud Uuid'),
         ];
     }
-
 }

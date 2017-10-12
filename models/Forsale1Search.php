@@ -19,7 +19,7 @@ class Forsale1Search extends Forsale1
     {
         return [
             [['tableid', 'id', 'sync_cloud_status'], 'integer'],
-            [['vehicledata', 'runrequest', 'sync_cloud_date', 'cloud_uuid'], 'safe'],
+            [['idVehicle', 'runrequest', 'sync_cloud_date', 'cloud_uuid'], 'safe'],
         ];
     }
 
@@ -65,7 +65,7 @@ class Forsale1Search extends Forsale1
             'sync_cloud_status' => $this->sync_cloud_status,
         ]);
 
-        $query->andFilterWhere(['like', 'vehicledata', $this->vehicledata])
+        $query->andFilterWhere(['like', 'idVehicle', $this->idVehicle])
             ->andFilterWhere(['like', 'runrequest', $this->runrequest])
             ->andFilterWhere(['like', 'cloud_uuid', $this->cloud_uuid]);
 

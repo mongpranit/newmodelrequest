@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -9,7 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * This is the model class for table "users".
+ * This is the model class for table "user".
  *
  * @property integer $id
  * @property string $username
@@ -26,16 +25,17 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class Users extends \yii\db\ActiveRecord
+//class User extends \yii\db\ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-    
+
     pubLic $strStatus=[
       self::STATUS_DELETED => 'Blocked',
       self::STATUS_ACTIVE => 'Actived',
     ];
-    
+
     public $currentPassword;
     public $newPassword;
     public $newPasswordConfirm;
@@ -56,51 +56,53 @@ class Users extends \yii\db\ActiveRecord
     const ROLE_USER=10;
     const ROLE_MANAGER=20;
     const ROLE_ADMIN=30;
-    
+
     public $strRoles=[
         self::ROLE_USER=> 'User',
         self::ROLE_MANAGER=>'Manager',
         self::ROLE_ADMIN=>'Administrator'
     ];
-    
+
     public function getRoles($roles=null){
         if($roles===null){
             return Yii::t('app',$this->strRoles[$this->roles]);
         }
         return Yii::t('app',$this->strRoles[$roles]);
     }
-    
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{users}}';
+        return 'user';
     }
 
     /**
      * @inheritdoc
      */
-   /* public function rules()
-    {
+   public function rules(){
         return [
-            [['username', 'fname', 'lname', 'auth_key', 'password_hash', 'email', 'tel', 'roles', 'created_at', 'updated_at'], 'required'],
-            [['segment'], 'string'],
-            [['status', 'roles', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
-            [['fname', 'lname'], 'string', 'max' => 60],
-            [['auth_key'], 'string', 'max' => 32],
-            [['tel'], 'string', 'max' => 50],
-            [['username'], 'unique'],
-            [['email'], 'unique'],
-            [['password_reset_token'], 'unique'],
+            [['fname','lname','tel','email','segment'],'string','max'=>100],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+
+            //กำหนดสิทธิ์------------------------------------
+            ['roles','default','value' => self::ROLE_USER],
+            ['roles','in','range' => [self::ROLE_USER, self::ROLE_MANAGER, self::ROLE_ADMIN]],
+
+            [['newPassword','currentPassword','newPasswordConfirm'],'required'],
+            [['currentPassword'],'validateCurrentPassword'],
+            [['newPassword','newPasswordConfirm'],'string','min'=>3],
+            [['newPassword','newPasswordConfirm'],'filter','filter'=>'trim'],
+            [['newPasswordConfirm'],'compare','compareAttribute'=>'newPassword','message'=>'Passwords do not match'],
         ];
-    }*/
+    }
 
     /**
      * @inheritdoc
      */
-   /* public function attributeLabels()
+    public function attributeLabels()
     {
         return [
             'id' => Yii::t('app', 'ID'),
@@ -118,42 +120,6 @@ class Users extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
-    }*/
-
-
-     public function rules(){
-        return [
-            [['fname','lname','tel','email','segment'],'string','max'=>100],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            
-            //กำหนดสิทธิ์------------------------------------
-            ['roles','default','value' => self::ROLE_USER],
-            ['roles','in','range' => [self::ROLE_USER, self::ROLE_MANAGER, self::ROLE_ADMIN]],
-            
-            [['newPassword','currentPassword','newPasswordConfirm'],'required'],
-            [['currentPassword'],'validateCurrentPassword'],
-            [['newPassword','newPasswordConfirm'],'string','min'=>3],
-            [['newPassword','newPasswordConfirm'],'filter','filter'=>'trim'],
-            [['newPasswordConfirm'],'compare','compareAttribute'=>'newPassword','message'=>'Passwords do not match'],
-        ];
-    }
-
-    public function scenarios(){
-        $scenarios=parent::scenarios();
-        $scenarios['signup']=['fname','lname','tel','email','segment','status','roles'];
-        $scenarios['update']=['fname','lname','tel','email','segment','status','roles'];
-        return $scenarios;
-    }
-    
-    public function attributeLabels() {
-       return[
-         'fname'=>'Name',
-         'lname'=>'Last Name',
-         'tel'=>'Tel',
-         'email'=>'Email',
-         'segment'
-       ];
     }
 
     public function validateCurrentPassword(){
@@ -165,7 +131,7 @@ class Users extends \yii\db\ActiveRecord
     }
 
     public function verifyPassword($password){
-        $dbpassword=static::findOne(['username'=>Yii::$app->users->identity->username,'status' =>self::STATUS_ACTIVE])->password_hash;
+        $dbpassword=static::findOne(['username'=>Yii::$app->user->identity->username,'status' =>self::STATUS_ACTIVE])->password_hash;
         return Yii::$app->security->validatePassword($password,$dbpassword);
     }
 
@@ -261,7 +227,7 @@ class Users extends \yii\db\ActiveRecord
      * @param string $password password to validate
      * @return boolean if password provided is valid for current user
     */
-    
+
     public function validatePassword($password){
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
@@ -271,7 +237,7 @@ class Users extends \yii\db\ActiveRecord
      *
      * @param string $password
      */
-    
+
     public function setPassword($password){
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
@@ -299,11 +265,10 @@ class Users extends \yii\db\ActiveRecord
     {
         $this->password_reset_token = null;
     }
-    
+
     //GET SEGMENT=============================
     public function getSegmentOptions(){
        $list=['product' => 'Product', 'content' => 'Content', 'hr' => 'HR','admin'=>'Admin','staff'=>'Staff'];
        return $list;
     }
-
 }

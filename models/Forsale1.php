@@ -9,7 +9,7 @@ use Yii;
  *
  * @property string $tableid
  * @property integer $id
- * @property string $vehicledata
+ * @property string $idVehicle
  * @property string $runrequest
  * @property string $sync_cloud_date
  * @property integer $sync_cloud_status
@@ -33,7 +33,7 @@ class Forsale1 extends \yii\db\ActiveRecord
         return [
             [['id', 'sync_cloud_status'], 'integer'],
             [['sync_cloud_date'], 'safe'],
-            [['vehicledata', 'runrequest', 'cloud_uuid'], 'string', 'max' => 500],
+            [['idVehicle', 'runrequest', 'cloud_uuid'], 'string', 'max' => 500],
         ];
     }
 
@@ -45,7 +45,7 @@ class Forsale1 extends \yii\db\ActiveRecord
         return [
             'tableid' => Yii::t('app', 'Tableid'),
             'id' => Yii::t('app', 'ID'),
-            'vehicledata' => Yii::t('app', 'Vehicledata'),
+            'idVehicle' => Yii::t('app', 'Id Vehicle'),
             'runrequest' => Yii::t('app', 'Runrequest'),
             'sync_cloud_date' => Yii::t('app', 'Sync Cloud Date'),
             'sync_cloud_status' => Yii::t('app', 'Sync Cloud Status'),

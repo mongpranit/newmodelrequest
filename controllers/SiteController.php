@@ -6,22 +6,19 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
-
 use app\models\Vehicledata;
 use app\models\VehicledataSearch;
 
-
 use app\models\SignupForm;
-
-use app\models\Users;           //For set Permission & Access Control
-use yii\filters\AccessControl;  //For set Permission & Access Control
-use app\component\AccessRule;   //For set Permission & Access Control
-
-
+use app\models\LoginForm;
+use app\models\ContactForm;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
+
+use app\models\User;           //For set Permission & Access Control
+use yii\filters\AccessControl;  //For set Permission & Access Control
+use app\component\AccessRule;   //For set Permission & Access Control
+use yii\base\Security;
 
 class SiteController extends Controller
 {
@@ -33,7 +30,7 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'ruleConfig'=>[
-                  'class'=>AccessRule::className(),  
+                  'class'=>AccessRule::className(),
                 ],
                 'only' => ['create', 'update', 'delete','index','view'],
                 'rules' => [
@@ -42,8 +39,8 @@ class SiteController extends Controller
                         'actions' => ['create','update','delete','index','view'],
                         'allow' => true,
                         'roles' => [
-                            Users::ROLE_MANAGER,
-                            Users::ROLE_ADMIN,
+                            User::ROLE_MANAGER,
+                            User::ROLE_ADMIN,
                             //User::ROLE_USER,
                         ],
                     ],
@@ -52,7 +49,7 @@ class SiteController extends Controller
                         'actions' => ['view','update'],
                         'allow' => true,
                         'roles' => [
-                            Users::ROLE_USER,
+                            User::ROLE_USER,
                         ],
                     ],
                 ],
@@ -91,18 +88,18 @@ class SiteController extends Controller
         }
          //END USER PROTECTED=====================================
     }//end***
-    
+
     //FUNCTION FOR CHECK PERMISSION BY SEGMENT=========
     public function checkSegmentAccess($segment,$role){
         /*if(!Yii::$app->user->can($system)){
             throw new ForbiddenHttpException("ขออภัย! คุณไม่มีสิทธิ์เข้าถึงระบบนี้");
         }*/
-        
+
         //===========ตรวจสอบสิทธิ์การเข้าถึงระบบ==============
         //ถ้า role == 30 สามารถเข้าได้เพราะเป็น administrator
         //ถ้า role !=30 ให้ตรวจสอบก่อนว่า User มี Secment ตรงกับที่กำหนดรึเปล่าถ้าตรงให้รีไดเร็กไปหน้าที่กำหนด
         //=============================================
-        
+
         if($role!=30){
             if($segment=='hr'){
                 return $this->redirect(['jobs/index']);
@@ -223,7 +220,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-    
+
     public function actionFormSubmission()
         {
             $security = new Security();
@@ -262,7 +259,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-    
+
 
     /**
      * Displays about page.

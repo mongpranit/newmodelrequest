@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'vehicledata') ?>
+    <?= $form->field($model, 'idVehicle') ?>
 
     <?= $form->field($model, 'runrequest') ?>
 

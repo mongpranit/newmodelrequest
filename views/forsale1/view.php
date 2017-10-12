@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'tableid',
             'id',
-            'vehicledata',
+            'idVehicle',
             'runrequest',
             'sync_cloud_date',
             'sync_cloud_status',

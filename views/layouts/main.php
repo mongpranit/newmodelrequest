@@ -43,9 +43,9 @@ AppAsset::register($this);
             ['label' => 'Forsale', 'url' => ['/forsale1/index']],
             ['label'=>'User','items'=>[
                     //['label' => 'Profile', 'url' => ['/user/view','id'=>Yii::$app->user->identity->id]],
-                    ['label' => 'Profile', 'url' => ['/users/view']],
-                    ['label' => 'User', 'url' => ['/users/index']],
-                    ['label' => 'Cnange Password', 'url' => ['/users/change_password']],
+                    ['label' => 'Profile', 'url' => ['/user/profile']],
+                    ['label' => 'User', 'url' => ['/user/index']],
+                    ['label' => 'Cnange Password', 'url' => ['/user/change_password']],
                     ['label'=>'Logout']
                     /*['label'=>'Logout(' . Yii::$app->user->identity->username . ')',
                         'url' => ['/site/logout'],
@@ -53,20 +53,25 @@ AppAsset::register($this);
                     ]*/
             ]],
 
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
+            Yii::$app->user->isGuest ?
+                ['label' => 'Login', 'url' => ['/site/login']] :
+                /*[
+                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => ['data-method' => 'post']
+                ],*/
+                ['label'=>'User','items'=>[
+                    ['label' => 'Profile', 'url' => ['/user/view','id'=>Yii::$app->user->identity->id]],
+                    ['label' => 'User', 'url' => ['/user/index']],
+                    ['label' => 'Cnange Password', 'url' => ['/user/change_password']],
+                    ['label'=>'Logout(' . Yii::$app->user->identity->username . ')',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post']
+                    ]
+                ]]
+
         ],
-        
+
     ]);
     NavBar::end();
     ?>
